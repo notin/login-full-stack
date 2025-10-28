@@ -23,15 +23,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
+    console.log('AuthContext: Checking localStorage', { hasToken: !!storedToken, hasUser: !!storedUser });
+
     if (storedToken && storedUser) {
       try {
+        const parsedUser = JSON.parse(storedUser);
         setToken(storedToken);
-        setUser(JSON.parse(storedUser));
+        setUser(parsedUser);
+        console.log('AuthContext: Restored user from localStorage', { hasToken: !!storedToken, hasUser: !!parsedUser });
       } catch (error) {
         console.error("Error parsing stored user data:", error);
         localStorage.removeItem("token");
         localStorage.removeItem("user");
       }
+    } else {
+      console.log('AuthContext: No stored credentials found');
     }
     setIsLoading(false);
   }, []);

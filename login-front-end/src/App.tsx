@@ -23,11 +23,18 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return !isAuthenticated ? <>{children}</> : <Navigate to="/dashboard" replace />;
+  if (isAuthenticated) {
+    console.log('PublicRoute: User is authenticated, redirecting to dashboard');
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  console.log('PublicRoute: User is not authenticated, showing public route');
+  return <>{children}</>;
 };
 
 console.log('App loaded');
 const AppRoutes = () => {
+  console.log('AppRoutes rendering, current path:', window.location.pathname);
   return (
     <Routes>
       <Route 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Login.css";
@@ -8,14 +8,8 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login, isAuthenticated } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +25,7 @@ export const Login: React.FC = () => {
       setIsLoading(false);
     }
   };
- console.log('Login component loaded');
+  console.log('Login component rendering');
   return (
     <div className="auth-container">
       <div className="auth-card">
