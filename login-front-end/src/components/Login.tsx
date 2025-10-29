@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useSetAtom} from "jotai";
+import { useSetAtom } from "jotai";
 import { loginAtom } from "../atoms/authActions";
+import { pageViewAtom } from "../atoms/auth";
 import "./Login.css";
-import axios from "axios";
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +10,7 @@ export const Login: React.FC = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const login = useSetAtom(loginAtom);
+  const setPageView = useSetAtom(pageViewAtom);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -56,6 +57,15 @@ export const Login: React.FC = () => {
           <button type="submit" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Enter"}
           </button>
+          <p className="auth-switch">
+            Don't have an account?{" "}
+            <span 
+              className="auth-link"
+              onClick={() => setPageView("register")}
+            >
+              Register here
+            </span>
+          </p>
         </form>
       </div>
     </div>

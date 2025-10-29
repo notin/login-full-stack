@@ -88,14 +88,17 @@ button:disabled {
 }
 
 .auth-switch a,
-.auth-switch Link {
+.auth-switch Link,
+.auth-switch .auth-link {
   color: #667eea;
   text-decoration: none;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .auth-switch a:hover,
-.auth-switch Link:hover {
+.auth-switch Link:hover,
+.auth-switch .auth-link:hover {
   text-decoration: underline;
 }
 

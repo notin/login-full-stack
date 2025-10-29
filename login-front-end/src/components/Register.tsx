@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { registerAtom } from "../atoms/authActions";
-import { isAuthenticatedAtom } from "../atoms/auth";
+import { isAuthenticatedAtom, pageViewAtom } from "../atoms/auth";
 import "./Login.css";
 
 export const Register: React.FC = () => {
@@ -13,13 +12,14 @@ export const Register: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [, register] = useAtom(registerAtom);
   const [isAuthenticated] = useAtom(isAuthenticatedAtom);
-  const navigate = useNavigate();
+  const setPageView = useSetAtom(pageViewAtom);
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/dashboard");
+      // Handle navigation if needed - you may want to use window.location or a state management approach
+      console.log("User is authenticated, should navigate to dashboard");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +39,7 @@ export const Register: React.FC = () => {
 
     try {
       await register({ email, password });
-      navigate("/dashboard");
+      // Navigate to dashboard on successful registration
     } catch (err: any) {
       setError(err.message || "Registration failed");
     } finally {
@@ -90,7 +90,13 @@ export const Register: React.FC = () => {
             {isLoading ? "Registering..." : "Register"}
           </button>
           <p className="auth-switch">
-            Already have an account? <Link to="/">Login here</Link>
+            Already have an account?{" "}
+            <span 
+              className="auth-link"
+              onClick={() => setPageView("login")}
+            >
+              Login here
+            </span>
           </p>
         </form>
       </div>
