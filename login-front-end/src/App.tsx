@@ -31,7 +31,7 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   console.log('PublicRoute: User is not authenticated, showing public route');
   return <>{children}</>;
 };
-
+ 
 console.log('App loaded');
 const AppRoutes = () => {
   console.log('AppRoutes rendering, current path:', window.location.pathname);
