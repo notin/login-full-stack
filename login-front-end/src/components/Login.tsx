@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { useAtom } from "jotai";
-// import { Link, useNavigate } from "react-router-dom";
+import { useSetAtom} from "jotai";
 import { loginAtom } from "../atoms/authActions";
-import { isLoadingAtom } from "../atoms/auth";
 import "./Login.css";
 
 export const Login: React.FC = () => {
@@ -10,9 +8,7 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [, login] = useAtom(loginAtom);
-  // const navigate = useNavigate();
-
+  const login = useSetAtom(loginAtom);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -34,7 +30,7 @@ export const Login: React.FC = () => {
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            {/*<label htmlFor="email">Email</label>*/}
             <input
               type="email"
               id="email"
@@ -45,7 +41,7 @@ export const Login: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            {/*<label htmlFor="password">Password</label>*/}
             <input
               type="password"
               id="password"
@@ -57,12 +53,8 @@ export const Login: React.FC = () => {
           </div>
           {error && <div className="error-message">{error}</div>}
           <button type="submit" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? "Logging in..." : "Enter"}
           </button>
-          <p className="auth-switch">
-            Don't have an account?
-            {/*<Link to="/register">Register here</Link>*/}
-          </p>
         </form>
       </div>
     </div>
