@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAtom } from "jotai";
+import { registerAtom } from "../atoms/authActions";
+import { isAuthenticatedAtom } from "../atoms/auth";
 import "./Login.css";
 
 export const Register: React.FC = () => {
@@ -9,7 +11,8 @@ export const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { register, isAuthenticated } = useAuth();
+  const [, register] = useAtom(registerAtom);
+  const [isAuthenticated] = useAtom(isAuthenticatedAtom);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +38,7 @@ export const Register: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await register(email, password);
+      await register({ email, password });
       navigate("/dashboard");
     } catch (err: any) {
       setError(err.message || "Registration failed");

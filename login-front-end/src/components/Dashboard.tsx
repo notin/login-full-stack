@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAtom } from "jotai";
+import { userAtom } from "../atoms/auth";
+import { logoutAtom } from "../atoms/authActions";
 import { protectedService } from "../services/api";
 import "./Dashboard.css";
 
 export const Dashboard: React.FC = () => {
-  const { user, logout } = useAuth();
+  const [user] = useAtom(userAtom);
+  const [, logout] = useAtom(logoutAtom);
   const [profileData, setProfileData] = useState<any>(null);
   const [protectedData, setProtectedData] = useState<any>(null);
   const [error, setError] = useState("");
