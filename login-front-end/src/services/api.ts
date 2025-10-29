@@ -56,12 +56,18 @@ export const authService = {
     return response.data;
   },
 
-  login: async (email: string, password: string): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>("/auth/login", {
-      email,
-      password,
-    });
-    return response.data;
+  login: async (email: string, password: string) => {
+    console.log('Calling to authenticate');
+    try {
+      const response = await axios.post("http://localhost:2323/api/auth/login", {
+        email,
+        password,
+      });
+      return response.data;
+    } catch (e ){
+      console.error('Failed authentication')
+    }
+
   },
 };
 

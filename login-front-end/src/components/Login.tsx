@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSetAtom} from "jotai";
 import { loginAtom } from "../atoms/authActions";
 import "./Login.css";
+import axios from "axios";
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState("");

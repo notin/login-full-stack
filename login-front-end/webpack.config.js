@@ -12,7 +12,7 @@ module.exports = (_, argv) => ({
     publicPath: "http://localhost:7878/",
   },
 
-  devtool: argv.mode === 'development' ? 'eval-source-map' : 'source-map',
+  devtool: argv.mode === 'development' ? 'inline-source-map' : 'source-map',
 
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
@@ -57,6 +57,9 @@ module.exports = (_, argv) => ({
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
+          options: {
+            sourceMaps: true,
+          },
         },
       },
     ],
