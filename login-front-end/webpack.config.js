@@ -8,10 +8,8 @@ const deps = require("./package.json").dependencies;
 const printCompilationMessage = require('./compilation.config.js');
 
 module.exports = (_, argv) => ({
-  devtool: argv.mode === 'development' ? 'eval-source-map' : 'source-map',
-  
   output: {
-    publicPath: "http://localhost:9797/",
+    publicPath: "http://localhost:7878/",
   },
 
   resolve: {
@@ -19,10 +17,8 @@ module.exports = (_, argv) => ({
   },
 
   devServer: {
-    port: 9797,
+    port: 7878,
     historyApiFallback: true,
-    hot: true,
-    liveReload: true,
     watchFiles: [path.resolve(__dirname, 'src')],
     onListening: function (devServer) {
       const port = devServer.server.address().port
