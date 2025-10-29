@@ -32,6 +32,10 @@
   font-size: 14px;
 }
 
+.profile-card .edit-btn {
+  width: 50%;
+}
+
 .logout-btn {
   padding: 12px 24px;
   background: #e74c3c;
