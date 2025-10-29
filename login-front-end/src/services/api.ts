@@ -39,6 +39,10 @@ api.interceptors.response.use(
 export interface User {
   id: string;
   email: string;
+  name?: string;
+  bio?: string;
+  skills?: string[];
+  profile_image_url?: string;
 }
 
 export interface AuthResponse {
@@ -74,6 +78,16 @@ export const authService = {
 export const protectedService = {
   getProfile: async () => {
     const response = await api.get("/protected/profile");
+    return response.data;
+  },
+
+  updateProfile: async (profileData: {
+    name?: string;
+    bio?: string;
+    skills?: string[] | string;
+    profile_image_url?: string;
+  }) => {
+    const response = await api.put("/protected/profile", profileData);
     return response.data;
   },
 
