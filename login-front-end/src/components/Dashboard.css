@@ -249,3 +249,8 @@
   background: #7f8c8d;
 }
 
+.empty-field {
+  color: #999;
+  font-style: italic;
+}
+

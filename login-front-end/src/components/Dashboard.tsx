@@ -135,7 +135,7 @@ export const Dashboard: React.FC = () => {
               )}
               <p><strong>User ID:</strong> {profileUser.userId || profileUser.id}</p>
               <p><strong>Email:</strong> {profileUser.email}</p>
-              {profileUser.name && <p><strong>Name:</strong> {profileUser.name}</p>}
+              <p><strong>Name:</strong> {profileUser.name || <em className="empty-field">Not set</em>}</p>
               {profileUser.bio && <p><strong>Bio:</strong> {profileUser.bio}</p>}
               {skillsArray.length > 0 && (
                 <div className="skills-container">
