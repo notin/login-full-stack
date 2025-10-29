@@ -1,19 +1,36 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useAtom } from 'jotai'
 
 import './index.css'
 import {Login} from "./components/Login";
 import { Register } from "./components/Register";
+import { Dashboard } from "./components/Dashboard";
 import { AuthInitializer } from "./components/AuthInitializer";
-import { pageViewAtom } from "./atoms/auth";
+import { pageViewAtom, isAuthenticatedAtom } from "./atoms/auth";
 
 const AppContent = () => {
-  const [pageView] = useAtom(pageViewAtom);
+  const [pageView, setPageView] = useAtom(pageViewAtom);
+  const [isAuthenticated] = useAtom(isAuthenticatedAtom);
+
+  // Check authentication on mount and redirect to dashboard if authenticated
+  useEffect(() => {
+    if (isAuthenticated && pageView !== 'dashboard') {
+      setPageView('dashboard');
+    } else if (!isAuthenticated && pageView === 'dashboard') {
+      setPageView('login');
+    }
+  }, [isAuthenticated, pageView, setPageView]);
   
   return (
     <div className="container">
-      {pageView === 'login' ? <Login /> : <Register />}
+      {pageView === 'dashboard' ? (
+        <Dashboard />
+      ) : pageView === 'login' ? (
+        <Login />
+      ) : (
+        <Register />
+      )}
     </div>
   );
 };

@@ -16,10 +16,9 @@ export const Register: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      // Handle navigation if needed - you may want to use window.location or a state management approach
-      console.log("User is authenticated, should navigate to dashboard");
+      setPageView("dashboard");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, setPageView]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +38,7 @@ export const Register: React.FC = () => {
 
     try {
       await register({ email, password });
-      // Navigate to dashboard on successful registration
+      setPageView("dashboard");
     } catch (err: any) {
       setError(err.message || "Registration failed");
     } finally {

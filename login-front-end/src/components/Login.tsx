@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useSetAtom } from "jotai";
+import React, {useEffect, useState} from "react";
+import { useAtom, useSetAtom } from "jotai";
 import { loginAtom } from "../atoms/authActions";
-import { pageViewAtom } from "../atoms/auth";
+import { pageViewAtom, isAuthenticatedAtom } from "../atoms/auth";
 import "./Login.css";
 
 export const Login: React.FC = () => {
@@ -11,6 +11,14 @@ export const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const login = useSetAtom(loginAtom);
   const setPageView = useSetAtom(pageViewAtom);
+  const [isAuthenticated] = useAtom(isAuthenticatedAtom);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setPageView("dashboard");
+    }
+  }, [isAuthenticated, setPageView]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -18,7 +26,7 @@ export const Login: React.FC = () => {
 
     try {
       await login({ email, password });
-      // navigate("/dashboard");
+      setPageView("dashboard");
     } catch (err: any) {
       setError(err.message || "Login failed");
     } finally {
