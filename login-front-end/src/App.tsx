@@ -1,76 +1,48 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider, useAuth } from './context/AuthContext'
-import { Login } from './components/Login'
-import { Register } from './components/Register'
-import { Dashboard } from './components/Dashboard'
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom/client'
+import { useAtom } from 'jotai'
+
 import './index.css'
+import {Login} from "./components/Login";
+import { Register } from "./components/Register";
+import { Dashboard } from "./components/Dashboard";
+import { AuthInitializer } from "./components/AuthInitializer";
+import { pageViewAtom, isAuthenticatedAtom } from "./atoms/auth";
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+const AppContent = () => {
+  const [pageView, setPageView] = useAtom(pageViewAtom);
+  const [isAuthenticated] = useAtom(isAuthenticatedAtom);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
-};
-
-const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isAuthenticated) {
-    console.log('PublicRoute: User is authenticated, redirecting to dashboard');
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  console.log('PublicRoute: User is not authenticated, showing public route');
-  return <>{children}</>;
-};
- 
-console.log('App loaded');
-const AppRoutes = () => {
-  console.log('AppRoutes rendering, current path:', window.location.pathname);
+  // Check authentication on mount and redirect to dashboard if authenticated
+  useEffect(() => {
+    if (isAuthenticated && pageView !== 'dashboard') {
+      setPageView('dashboard');
+    } else if (!isAuthenticated && pageView === 'dashboard') {
+      setPageView('login');
+    }
+  }, [isAuthenticated, pageView, setPageView]);
+  
   return (
-    <Routes>
-      <Route 
-        path="/" 
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        } 
-      />
-      <Route 
-        path="/register" 
-        element={
-          <PublicRoute>
-            <Register />
-          </PublicRoute>
-        } 
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+    <div className="container">
+      {pageView === 'dashboard' ? (
+        <Dashboard />
+      ) : pageView === 'login' ? (
+        <Login />
+      ) : (
+        <Register />
+      )}
+    </div>
   );
 };
 
 const App = () => (
-  <AuthProvider>
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
-  </AuthProvider>
+  <AuthInitializer>
+    <AppContent />
+  </AuthInitializer>
 )
+const rootElement = document.getElementById('app')
+if (!rootElement) throw new Error('Failed to find the root element')
 
-export default App
+const root = ReactDOM.createRoot(rootElement as HTMLElement)
+
+root.render(<App />)

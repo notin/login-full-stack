@@ -15,15 +15,21 @@
   border-radius: 12px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
+.dashboard-header button {
+  font-size: 16px;
+  width: 50%;
+}
 
 .dashboard-header h1 {
   margin: 0 0 10px 0;
   color: #333;
+  font-size: 24px;
 }
 
 .dashboard-header p {
   margin: 0;
   color: #666;
+  font-size: 14px;
 }
 
 .logout-btn {
@@ -32,7 +38,7 @@
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s;
@@ -62,11 +68,13 @@
   color: #333;
   border-bottom: 2px solid #667eea;
   padding-bottom: 10px;
+  font-size: 20px;
 }
 
 .card p {
   margin: 10px 0;
   color: #555;
+  font-size: 14px;
 }
 
 .refresh-btn {
@@ -76,7 +84,7 @@
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   transition: background 0.3s;
 }

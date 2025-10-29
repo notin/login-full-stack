@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import React, {useEffect, useState} from "react";
+import { useAtom, useSetAtom } from "jotai";
+import { loginAtom } from "../atoms/authActions";
+import { pageViewAtom, isAuthenticatedAtom } from "../atoms/auth";
 import "./Login.css";
 
 export const Login: React.FC = () => {
@@ -8,8 +9,15 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const login = useSetAtom(loginAtom);
+  const setPageView = useSetAtom(pageViewAtom);
+  const [isAuthenticated] = useAtom(isAuthenticatedAtom);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setPageView("dashboard");
+    }
+  }, [isAuthenticated, setPageView]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,8 +25,8 @@ export const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      navigate("/dashboard");
+      await login({ email, password });
+      setPageView("dashboard");
     } catch (err: any) {
       setError(err.message || "Login failed");
     } finally {
@@ -32,7 +40,7 @@ export const Login: React.FC = () => {
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            {/*<label htmlFor="email">Email</label>*/}
             <input
               type="email"
               id="email"
@@ -43,7 +51,7 @@ export const Login: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            {/*<label htmlFor="password">Password</label>*/}
             <input
               type="password"
               id="password"
@@ -55,10 +63,16 @@ export const Login: React.FC = () => {
           </div>
           {error && <div className="error-message">{error}</div>}
           <button type="submit" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? "Logging in..." : "Enter"}
           </button>
           <p className="auth-switch">
-            Don't have an account? <Link to="/register">Register here</Link>
+            Don't have an account?{" "}
+            <span 
+              className="auth-link"
+              onClick={() => setPageView("register")}
+            >
+              Register here
+            </span>
           </p>
         </form>
       </div>

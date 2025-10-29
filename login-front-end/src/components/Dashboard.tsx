@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAtom, useSetAtom } from "jotai";
+import { userAtom, pageViewAtom } from "../atoms/auth";
+import { logoutAtom } from "../atoms/authActions";
 import { protectedService } from "../services/api";
 import "./Dashboard.css";
 
 export const Dashboard: React.FC = () => {
-  const { user, logout } = useAuth();
+  const [user] = useAtom(userAtom);
+  const [, logout] = useAtom(logoutAtom);
+  const setPageView = useSetAtom(pageViewAtom);
   const [profileData, setProfileData] = useState<any>(null);
   const [protectedData, setProtectedData] = useState<any>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    setPageView("login");
+  };
 
   const fetchProtectedData = async () => {
     setLoading(true);
@@ -38,7 +47,7 @@ export const Dashboard: React.FC = () => {
           <h1>Dashboard</h1>
           <p>Welcome, {user?.email}!</p>
         </div>
-        <button onClick={logout} className="logout-btn">
+        <button onClick={handleLogout} className="logout-btn">
           Logout
         </button>
       </div>

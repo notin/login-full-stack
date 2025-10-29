@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { authRoutes } from "./routes/auth";
 import { protectedRoutes } from "./routes/protected";
 import { authenticateToken } from "./middleware/auth";
+import { initializeDatabase } from "./db/init";
 
 dotenv.config();
 
@@ -13,6 +14,14 @@ const port = 2323;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Initialize database
+initializeDatabase().catch((error) => {
+  console.error("\n⚠️  Failed to initialize database");
+  console.error("Server will not start without a database connection.\n");
+  console.error("Please fix the database connection and restart the server.\n");
+  process.exit(1);
+});
 
 // Routes
 app.get("/", (req, res) => {
