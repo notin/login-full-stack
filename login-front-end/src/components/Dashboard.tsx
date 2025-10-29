@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useAtom, useSetAtom } from "jotai";
-import { userAtom, pageViewAtom } from "../atoms/auth";
-import { logoutAtom } from "../atoms/authActions";
 import { protectedService } from "../services/api";
 import "./Dashboard.css";
 
 export const Dashboard: React.FC = () => {
-  const [user] = useAtom(userAtom);
-  const [, logout] = useAtom(logoutAtom);
-  const setPageView = useSetAtom(pageViewAtom);
   const [profileData, setProfileData] = useState<any>(null);
   const [protectedData, setProtectedData] = useState<any>(null);
   const [error, setError] = useState("");
@@ -22,11 +16,6 @@ export const Dashboard: React.FC = () => {
     skills: "",
     profile_image_url: "",
   });
-
-  const handleLogout = () => {
-    logout();
-    setPageView("login");
-  };
 
   const fetchProtectedData = async () => {
     setLoading(true);
@@ -116,16 +105,6 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      <div className="dashboard-header">
-        <div>
-          <h1>Dashboard</h1>
-          <p>Welcome, {profileUser?.email || user?.email || "User"}!</p>
-        </div>
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
-      </div>
-
       <div className="dashboard-content">
         <div className="card profile-card">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>

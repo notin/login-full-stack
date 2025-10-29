@@ -129,6 +129,75 @@ router.put("/profile", async (req: AuthRequest, res: Response) => {
   }
 });
 
+// Search users endpoint
+router.get("/search", async (req: AuthRequest, res: Response) => {
+  try {
+    const { filter, query } = req.query;
+
+    if (!filter || !query) {
+      return res.status(400).json({ error: "Filter and query parameters are required" });
+    }
+
+    const searchFilter = filter as string;
+    const searchQuery = query as string;
+
+    if (searchQuery.trim().length < 2) {
+      return res.status(400).json({ error: "Search query must be at least 2 characters" });
+    }
+
+    let searchSQL = "";
+    let searchParams: any[] = [];
+
+    switch (searchFilter) {
+      case "name":
+        searchSQL = "SELECT id, email, name, bio, skills, profile_image_url FROM users WHERE LOWER(name) LIKE LOWER($1) LIMIT 50";
+        searchParams = [`%${searchQuery}%`];
+        break;
+      case "email":
+        searchSQL = "SELECT id, email, name, bio, skills, profile_image_url FROM users WHERE LOWER(email) LIKE LOWER($1) LIMIT 50";
+        searchParams = [`%${searchQuery}%`];
+        break;
+      case "id":
+        // Search by exact ID or starts with
+        searchSQL = "SELECT id, email, name, bio, skills, profile_image_url FROM users WHERE CAST(id AS TEXT) LIKE $1 LIMIT 50";
+        searchParams = [`%${searchQuery}%`];
+        break;
+      case "skills":
+        // Search in skills array
+        searchSQL = `SELECT id, email, name, bio, skills, profile_image_url 
+                     FROM users 
+                     WHERE EXISTS (
+                       SELECT 1 FROM unnest(skills) AS skill 
+                       WHERE LOWER(skill::TEXT) LIKE LOWER($1)
+                     ) LIMIT 50`;
+        searchParams = [`%${searchQuery}%`];
+        break;
+      default:
+        return res.status(400).json({ error: "Invalid filter. Must be: name, email, id, or skills" });
+    }
+
+    const result = await pool.query(searchSQL, searchParams);
+    const users = result.rows.map((row) => ({
+      id: row.id.toString(),
+      userId: row.id.toString(),
+      email: row.email,
+      name: row.name,
+      bio: row.bio,
+      skills: row.skills || [],
+      profile_image_url: row.profile_image_url,
+    }));
+
+    res.json({
+      message: "Search completed",
+      users,
+      count: users.length,
+    });
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Another protected route
 router.get("/data", (req: AuthRequest, res: Response) => {
   res.json({

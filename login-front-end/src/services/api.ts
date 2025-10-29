@@ -91,6 +91,13 @@ export const protectedService = {
     return response.data;
   },
 
+  searchUsers: async (filter: string, query: string) => {
+    const response = await api.get("/protected/search", {
+      params: { filter, query },
+    });
+    return response.data;
+  },
+
   getData: async () => {
     const response = await api.get("/protected/data");
     return response.data;

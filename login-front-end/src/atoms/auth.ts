@@ -5,7 +5,7 @@ import { User } from '../services/api';
 export const userAtom = atom<User | null>(null);
 export const tokenAtom = atom<string | null>(null);
 export const isLoadingAtom = atom<boolean>(true);
-export const pageViewAtom = atom<'login' | 'register' | 'dashboard'>('login');
+export const pageViewAtom = atom<'login' | 'register' | 'dashboard' | 'browse'>('login');
 
 // Derived atoms
 export const isAuthenticatedAtom = atom(
