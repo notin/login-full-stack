@@ -6,6 +6,8 @@ import './index.css'
 import {Login} from "./components/Login";
 import { Register } from "./components/Register";
 import { Dashboard } from "./components/Dashboard";
+import { Browse } from "./components/Browse";
+import { Header } from "./components/Header";
 import { AuthInitializer } from "./components/AuthInitializer";
 import { pageViewAtom, isAuthenticatedAtom } from "./atoms/auth";
 
@@ -15,17 +17,20 @@ const AppContent = () => {
 
   // Check authentication on mount and redirect to dashboard if authenticated
   useEffect(() => {
-    if (isAuthenticated && pageView !== 'dashboard') {
+    if (isAuthenticated && (pageView === 'login' || pageView === 'register')) {
       setPageView('dashboard');
-    } else if (!isAuthenticated && pageView === 'dashboard') {
+    } else if (!isAuthenticated && (pageView === 'dashboard' || pageView === 'browse')) {
       setPageView('login');
     }
   }, [isAuthenticated, pageView, setPageView]);
   
   return (
     <div className="container">
+      {isAuthenticated && <Header />}
       {pageView === 'dashboard' ? (
         <Dashboard />
+      ) : pageView === 'browse' ? (
+        <Browse />
       ) : pageView === 'login' ? (
         <Login />
       ) : (
