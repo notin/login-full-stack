@@ -12,6 +12,8 @@ module.exports = (_, argv) => ({
     publicPath: "http://localhost:7878/",
   },
 
+  devtool: argv.mode === 'development' ? 'eval-source-map' : 'source-map',
+
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
   },
